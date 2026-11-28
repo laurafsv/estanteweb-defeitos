@@ -24,8 +24,13 @@ public class LivroController {
     }
 
     @GetMapping("/livros/html")
-    public String listarHtml(@RequestParam(required = false) String ordem, Model model) {
-        model.addAttribute("livros", repositorio.listarOrdenadoPor(ordem));
+    public String listarHtml(@RequestParam(required = false) String q,
+            @RequestParam(required = false) String autor,
+            @RequestParam(required = false) String ordem, Model model) {
+        model.addAttribute("livros", repositorio.buscar(q, autor, ordem));
+        model.addAttribute("q", q);
+        model.addAttribute("autor", autor);
+        model.addAttribute("ordem", ordem);
         return "livros";
     }
 

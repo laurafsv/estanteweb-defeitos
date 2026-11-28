@@ -14,8 +14,11 @@ public class SugestaoController {
     private SugestaoRepository sugestaoRepository;
 
     @GetMapping("/sugestoes")
-    public String listar(Model model) {
-        model.addAttribute("sugestoes", sugestaoRepository.listarTodas());
+    public String listar(@RequestParam(required = false) String nomeCliente,
+            @RequestParam(required = false) String livroSugerido, Model model) {
+        model.addAttribute("sugestoes", sugestaoRepository.buscar(nomeCliente, livroSugerido));
+        model.addAttribute("nomeCliente", nomeCliente);
+        model.addAttribute("livroSugerido", livroSugerido);
         return "sugestoes";
     }
 

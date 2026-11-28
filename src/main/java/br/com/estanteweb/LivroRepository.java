@@ -32,6 +32,41 @@ public class LivroRepository {
         return deLinhas(jdbcTemplate.queryForList(sql));
     }
 
+    public List<Livro> buscarPorTitulo(String termo) {
+        return buscar(termo, null);
+    }
+
+    public List<Livro> buscar(String termo, String autor) {
+        return buscar(termo, autor, null);
+    }
+
+    public List<Livro> buscar(String termo, String autor, String ordem) {
+        String sql = "SELECT * FROM livro";
+        List<String> condicoes = new ArrayList<>();
+        List<Object> parametros = new ArrayList<>();
+
+        if (termo != null && !termo.isBlank()) {
+            condicoes.add("titulo LIKE ? ESCAPE '!'");
+            parametros.add("%" + escaparCuringas(termo.trim()) + "%");
+        }
+        if (autor != null && !autor.isBlank()) {
+            condicoes.add("autor LIKE ? ESCAPE '!'");
+            parametros.add("%" + escaparCuringas(autor.trim()) + "%");
+        }
+        if (!condicoes.isEmpty()) {
+            sql += " WHERE " + String.join(" AND ", condicoes);
+        }
+        if (ordem != null && COLUNAS_PERMITIDAS.contains(ordem)) {
+            sql += " ORDER BY " + ordem;
+        }
+
+        return deLinhas(jdbcTemplate.queryForList(sql, parametros.toArray()));
+    }
+
+    private String escaparCuringas(String texto) {
+        return texto.replace("!", "!!").replace("%", "!%").replace("_", "!_");
+    }
+
     public Livro buscarPorId(Long id) {
         String sql = "SELECT * FROM livro WHERE id = ?";
         List<Map<String, Object>> linhas = jdbcTemplate.queryForList(sql, id);
