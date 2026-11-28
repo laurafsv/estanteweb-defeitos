@@ -124,7 +124,11 @@ public class LivroController {
     }
 
     @PostMapping("/livros/{id}/excluir")
-    public String excluir(@PathVariable Long id) {
+    public String excluir(@PathVariable Long id, HttpSession session) {
+        if (session.getAttribute("usuarioLogado") == null) {
+            return "redirect:/login";
+        }
+
         repositorio.excluir(id);
         return "redirect:/livros/html";
     }
