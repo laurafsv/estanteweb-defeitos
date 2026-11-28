@@ -36,7 +36,7 @@ public class LivroController {
 
     @GetMapping("/livros/novo")
     public String novo(HttpSession session, Model model) {
-        if (session.getAttribute("usuario") == null) {
+        if (session.getAttribute("usuarioLogado") == null) {
             return "redirect:/login";
         }
         return "livro-novo";
@@ -47,7 +47,7 @@ public class LivroController {
             @RequestParam int ano, @RequestParam double preco,
             HttpSession session, Model model) {
 
-        if (session.getAttribute("usuario") == null) {
+        if (session.getAttribute("usuarioLogado") == null) {
             return "redirect:/login";
         }
 
@@ -83,7 +83,7 @@ public class LivroController {
             @RequestParam String autor, @RequestParam int ano,
             @RequestParam double preco, HttpSession session) {
 
-        if (session.getAttribute("usuario") == null) {
+        if (session.getAttribute("usuarioLogado") == null) {
             return "redirect:/login";
         }
 
@@ -100,7 +100,7 @@ public class LivroController {
 
     @GetMapping("/livros/{id}/excluir")
     public String confirmarExclusao(@PathVariable Long id, HttpSession session, Model model) {
-        if (session.getAttribute("usuario") == null) {
+        if (session.getAttribute("usuarioLogado") == null) {
             return "redirect:/login";
         }
 
